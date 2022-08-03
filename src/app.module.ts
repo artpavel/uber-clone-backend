@@ -1,11 +1,12 @@
-import { Restaurant } from './restaurants/entities/restaurant.entity';
+import { User } from './users/entities/user.entity';
 import { Module } from '@nestjs/common';
 import * as joi from 'joi';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { RestaurantsModule } from './restaurants/restaurants.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -31,13 +32,14 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== 'prod',
       logging: process.env.NODE_ENV !== 'prod',
-      entities: [Restaurant],
+      entities: [User],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
     }),
-    RestaurantsModule,
+    UsersModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],
