@@ -6,6 +6,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
+import { IsEnum, IsString } from 'class-validator';
 
 enum UserRole {
   Client,
@@ -20,15 +21,18 @@ registerEnumType(UserRole, { name: 'UserRole' });
 @ObjectType()
 @Entity()
 export class User extends CoreEntity {
-  @Field(() => String)
   @Column()
+  @IsString()
+  @Field(() => String)
   email: string;
 
-  @Field(() => String)
   @Column()
+  @IsString()
+  @Field(() => String)
   password: string;
 
-  @Field(() => UserRole)
   @Column({ type: 'enum', enum: UserRole })
+  @IsEnum(UserRole)
+  @Field(() => UserRole)
   role: UserRole;
 }

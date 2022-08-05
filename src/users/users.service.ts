@@ -5,27 +5,27 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
 
   // create account
-  async createAccount({ email, password, role }: CreateAccountInput) {
+  async createAccount({
+    email,
+    password,
+    role,
+  }: CreateAccountInput): Promise<string | undefined> {
     try {
-      const exists = await this.users.findOne({ where: { email } });
+      const exists = await this.users.findOneBy({ email: email });
       if (exists) {
-        // make error
-        return;
+        return 'There is a user with that email already';
       }
+
       await this.users.save(this.users.create({ email, password, role }));
-      return true;
-    } catch (error) {
-      // make error
-      console.log(error.message);
-      return;
+    } catch (e) {
+      console.log(e.message);
+      return "Couldn't create account";
     }
-    // check email
-    // create user & hash the password
   }
 }
