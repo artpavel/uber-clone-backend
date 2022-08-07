@@ -1,3 +1,4 @@
+import { MytationOutput } from './../../common/dto/output.dto';
 import { Field, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import { User } from '../entities/user.entity';
 
@@ -9,10 +10,4 @@ export class CreateAccountInput extends PickType(User, [
 ] as const) {}
 
 @ObjectType()
-export class CreateAccountOutput {
-  @Field(() => String, { nullable: true })
-  error?: string;
-
-  @Field(() => Boolean)
-  ok: boolean;
-}
+export class CreateAccountOutput extends MytationOutput {}
