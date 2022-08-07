@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CommonModule } from './common/common.module';
         DB_PASSWORD: joi.string().required(),
         DB_NAME: joi.string().required(),
         DB_PORT: joi.number().required(),
+        PRIVATE_KEY: joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -37,6 +39,9 @@ import { CommonModule } from './common/common.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+    }),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
     }),
     UsersModule,
     CommonModule,

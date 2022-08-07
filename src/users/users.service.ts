@@ -1,14 +1,19 @@
+import { JwtService } from './../jwt/jwt.service';
+import { ConfigService } from '@nestjs/config';
 import { LoginInput } from './dto/login.dto';
 import { CreateAccountInput } from './dto/create-account.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
+    private readonly config: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
   // create account
@@ -54,9 +59,10 @@ export class UsersService {
         };
       }
       // make a JWT
+      const token = jwt.sign({ id: user.id }, this.config.get('PRIVATE_KEY'));
       return {
         ok: true,
-        token: 'lalalala',
+        token,
       };
     } catch (error) {
       console.log(error.message);
