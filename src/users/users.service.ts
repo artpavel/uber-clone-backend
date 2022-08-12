@@ -71,4 +71,9 @@ export class UsersService {
       };
     }
   }
+
+  // find user by id with token
+  async findById(id: number): Promise<User> {
+    return this.users.findOneBy({ id });
+  }
 }
